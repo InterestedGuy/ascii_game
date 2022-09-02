@@ -14,16 +14,10 @@ fn main() {
         health: 100,
         color: String::from("green"),
         icon: String::from("@")};
-    
     while player.health != 0{
         render(&player, &level);
         let mut input = String::new();
-        io::stdin().read_line(&mut input).expect("failed UwU!");
-        let input:Vec<&str> = input.split(" ").map(|s| s.trim()).collect();
-        let direction = input[0];
-        let steps:usize = input[1].parse().expect("e");
-        if player.can_move(&level, (direction, steps)) {
-            player.position.1 -= steps;
-        }
+        io::stdin().read_line(&mut input).expect("Failed");
+        player.move_player(&level, input);
     }
 }

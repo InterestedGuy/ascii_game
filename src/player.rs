@@ -13,11 +13,9 @@ impl Player{
         print!("{}", self.icon.color(color));
     }
 
-    pub fn can_move(&self, level: &Vec<Vec<String>>, movement: (&str, usize)) -> bool{
+    pub fn can_move(&self, level: &Vec<Vec<String>>, direction: &str, steps: usize) -> bool{
         let x = self.position.0;
         let y = self.position.1;
-        let direction = movement.0;
-        let steps = movement.1;
         let mut result = true;
         if direction == "w" {
             for i in 0..=steps{
@@ -27,7 +25,78 @@ impl Player{
                 }
                 result = true;
             }
+        }else if direction == "s" {
+            for i in 0..=steps{
+                if level[y + i][x] != " "{
+                    result = false;
+                    break;
+                }
+                result = true;
+            }
+        }else if direction == "a" {
+            for i in 0..=steps{
+                if level[y][x - i] != " "{
+                    result = false;
+                    break;
+                }
+                result = true;
+            }
+        }else if direction == "d" {
+            for i in 0..=steps{
+                if level[y][x + i] != " "{
+                    result = false;
+                    break;
+                }
+                result = true;
+            }
         }
         return result;
     }
+    pub fn move_player(&mut self,level:&Vec<Vec<String>> , input: String){
+        let input:Vec<&str> = input.split(" ").map(|s| s.trim()).collect();
+        if input.len() < 2 {
+            let direction = input[0].trim();
+            let steps:usize = 1;
+            if direction.to_lowercase() == "w"{
+                if self.can_move(level, direction, steps){
+                    self.position.1 -= steps;
+                }
+            }else if direction.to_lowercase() == "s"{
+                if self.can_move(level, direction, steps){
+                    self.position.1 += steps;
+                }
+            }else if direction.to_lowercase() == "d"{
+                if self.can_move(level, direction, steps){
+                    self.position.0 += steps;
+                }
+            }else if direction.to_lowercase() == "a"{
+                if self.can_move(level, direction, steps){
+                    self.position.0 -= steps;
+                }
+            }
+    }else{
+        let direction = input[0].trim();
+        let steps:usize = match input[1].parse() {
+            Err(_) => 0,
+            Ok(steps) => steps 
+        };
+        if direction.to_lowercase() == "w"{
+            if self.can_move(level, direction, steps){
+                self.position.1 -= steps;
+            }
+        }else if direction.to_lowercase() == "s"{
+            if self.can_move(level, direction, steps){
+                self.position.1 += steps;
+            }
+        }else if direction.to_lowercase() == "d"{
+            if self.can_move(level, direction, steps){
+                self.position.0 += steps;
+            }
+        }else if direction.to_lowercase() == "a"{
+            if self.can_move(level, direction, steps){
+                self.position.0 -= steps;
+            }
+        }
+    }
+}
 }
