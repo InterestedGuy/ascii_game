@@ -9,14 +9,14 @@ use std::io;
 
 fn main() {
     let mut message = String::from("");
-    let level = load_level("src/level.txt");
     let mut player = Player{
-        position: (20, 20),
+        position: (0, 0),
         health: 100,
         color: String::from("green"),
         icon: String::from("@")};
+    let level = load_level("src/level.txt", &mut player);
     while player.health != 0 {
-        render(&player, &level, &message);
+        render(&mut player, &level, &message);
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed");
         message = player.move_player(&level, input);
