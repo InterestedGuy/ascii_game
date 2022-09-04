@@ -8,16 +8,17 @@ use render::render;
 use std::io;
 
 fn main() {
+    let mut message = String::from("");
     let level = load_level("src/level.txt");
     let mut player = Player{
         position: (20, 20),
         health: 100,
         color: String::from("green"),
         icon: String::from("@")};
-    while player.health != 0{
-        render(&player, &level);
+    while player.health != 0 {
+        render(&player, &level, &message);
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed");
-        player.move_player(&level, input);
+        message = player.move_player(&level, input);
     }
 }
