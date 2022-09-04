@@ -13,74 +13,78 @@ impl Player{
         print!("{}", self.icon.color(color));
     }
 
-    pub fn can_move(&self, level: &Vec<Vec<String>> , direction: &str, steps:usize) -> bool{
+    pub fn can_move(&self, level: &Vec<Vec<String>>, direction: &str, steps: usize) -> bool{
         let x = self.position.0;
         let y = self.position.1;
-        if direction == "w"{
-            match y.checked_sub(steps) {
-                Some(_) => {
-                    if level[y - steps][x] != " "{
-                        return false;
-                    }else{
-                        return true;
-                    }
-                },
-                None => return false}
-        }else if direction == "a"{
-            match x.checked_sub(steps) {
-                Some(_) => {
-                    if level[y][x - steps] != " "{
-                        return false;
-                    }else{
-                        return true;
-                    }
+        let mut result = true;
+        if direction == "w" {
+            for i in 0..=steps{
+                if level[y - i][x] != " "{
+                    result = false;
+                    break;
                 }
-                None => return false}
-        }else if direction == "s"{
-            if y + steps >= level.len(){
-                return false;
-            }else{
-                if level[y + steps][x] != " "{
-                    return false;
-                }else{
-                    return true;
-                }
+                result = true;
             }
-        }else if direction == "d"{
-            if x + steps >= level[y].len(){
-                return false;
-            }else{
-                if level[y][x + steps] != " "{
-                    return false;
-                }else{
-                    return true;
+        }else if direction == "s" {
+            for i in 0..=steps{
+                if level[y + i][x] != " "{
+                    result = false;
+                    break;
                 }
+                result = true;
+            }
+        }else if direction == "a" {
+            for i in 0..=steps{
+                if level[y][x - i] != " "{
+                    result = false;
+                    break;
+                }
+                result = true;
+            }
+        }else if direction == "d" {
+            for i in 0..=steps{
+                if level[y][x + i] != " "{
+                    result = false;
+                    break;
+                }
+                result = true;
+            }
+        }
+        return result;
+    }
+    pub fn move_player(&mut self,level:&Vec<Vec<String>> , input: String) -> String{
+        let input:Vec<&str> = input.split(" ").map(|s| s.trim()).collect();
+        let steps:usize = if input.len() < 2 { 1 } else { match input[1].trim().parse() { 
+            Err(_) => { return String::from("Invalid number of steps.");},
+            Ok(steps) => steps } };
+        let direction = input[0];
+        if direction.to_lowercase() == "w"{
+            if self.can_move(level, direction, steps){
+                self.position.1 -= steps;
+            }else {
+                return String::from("you're not a ghost.")
+            }
+        }else if direction.to_lowercase() == "s"{
+            if self.can_move(level, direction, steps){
+                self.position.1 += steps;
+            }else {
+                return String::from("you're not a ghost.")
+            }
+        }else if direction.to_lowercase() == "d"{
+            if self.can_move(level, direction, steps){
+                self.position.0 += steps;
+            }else {
+                return String::from("you're not a ghost.")
+            }
+        }else if direction.to_lowercase() == "a"{
+            if self.can_move(level, direction, steps){
+                self.position.0 -= steps;
+            }else {
+                return String::from("you're not a ghost.")
             }
         }else{
-            return false;
+            return String::from("Invalid direction.");
         }
-    }
-
-    pub fn move_player(&self, input: String) -> (String, usize, String) {
-            let input:Vec<&str> = input.split(" ").map(|s| s.trim()).collect();
-            let direction = match input[0]{
-                "w" => String::from("w"),
-                "a" => String::from("a"),
-                "s"=> String::from("s"),
-                "d" => String::from("d"),
-                _ => String::from("invalid"),
-            };
-            let steps:usize = match input.get(1) {
-                None => 1,
-                Some(steps) => match steps.parse() {
-                    Err(_) => 1,
-                    Ok(steps) => steps
-                }
-            };
-            if direction == "invalid" {
-                (direction, steps, String::from("Invalid direction !"))
-            }else{
-                (direction, steps, String::from("ok"))
-            }
+        String::from("Ok!")
     }
 }

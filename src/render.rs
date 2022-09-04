@@ -1,6 +1,6 @@
 use crate::player::Player;
 
-pub fn render(player: &Player, level:&Vec<Vec<String>>){
+pub fn render(player: &Player, level:&Vec<Vec<String>>, message:&String){
     print!("\x1B[2J\x1B[1;1H");
     for y in 0..level.len(){
         let floor = &level[y];
@@ -16,4 +16,5 @@ pub fn render(player: &Player, level:&Vec<Vec<String>>){
     }
     println!();
     println!("[HP: {}, X: {} Y: {}]", player.health, player.position.0 - 1, player.position.1 - 1);
+    println!("{message}");
 }
