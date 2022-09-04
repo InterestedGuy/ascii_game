@@ -14,12 +14,13 @@ impl Player{
     }
 
     pub fn can_move(&self, level: &Vec<Vec<String>>, direction: &str, steps: usize) -> bool{
+        let open_terrain: Vec<String> = [" ".to_string() , "0".to_string()].to_vec();
         let x = self.position.0;
         let y = self.position.1;
         let mut result = true;
         if direction == "w" {
             for i in 0..=steps{
-                if level[y - i][x] != " "{
+                if !open_terrain.contains(&level[y - i][x]){
                     result = false;
                     break;
                 }
@@ -27,7 +28,7 @@ impl Player{
             }
         }else if direction == "s" {
             for i in 0..=steps{
-                if level[y + i][x] != " "{
+                if !open_terrain.contains(&level[y + i][x]){
                     result = false;
                     break;
                 }
@@ -35,7 +36,7 @@ impl Player{
             }
         }else if direction == "a" {
             for i in 0..=steps{
-                if level[y][x - i] != " "{
+                if !open_terrain.contains(&level[y][x + i]){
                     result = false;
                     break;
                 }
@@ -43,7 +44,7 @@ impl Player{
             }
         }else if direction == "d" {
             for i in 0..=steps{
-                if level[y][x + i] != " "{
+                if !open_terrain.contains(&level[y][x - i]){
                     result = false;
                     break;
                 }
