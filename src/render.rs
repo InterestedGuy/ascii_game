@@ -15,6 +15,6 @@ pub fn render(player: &Player, level:&Vec<Vec<String>>, message:&String){
         println!();
     }
     println!();
-    println!("[HP: {}, X: {} Y: {}]", player.health, player.position.0 - 1, player.position.1 - 1);
+    println!("[HP: {}, X: {} Y: {}]", player.health, player.position.0, player.position.1);
     println!("{message}");
 }

@@ -14,11 +14,16 @@ fn main() {
         health: 100,
         color: String::from("green"),
         icon: String::from("@")};
-    let level = load_level("src/level.txt", &mut player);
-    while player.health != 0 {
+    let level_tuple = load_level("src/level.txt", &mut player);
+    let level = level_tuple.0;
+    let end_position = level_tuple.1;
+    while player.health != 0 && player.position != end_position{
+        /* println!("{:?}", (end_position));
+        break; */
         render(&mut player, &level, &message);
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed");
         message = player.move_player(&level, input);
     }
+    println!("You win !!");
 }
