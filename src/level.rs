@@ -2,10 +2,9 @@ use core::panic;
 use std::path::Path;
 use std::fs::read_to_string;
 
-use crate::player::Player;
-
-pub fn load_level(path: &str, player:&mut Player) -> (Vec<Vec<String>>, (usize,usize)){
+pub fn load_level(path: &str) -> (Vec<Vec<String>>, (usize,usize), (usize, usize)){
     let mut end_position:Option<(usize, usize)> = None;
+    let mut start_position:Option<(usize, usize)> = None;
     let mut level:Vec<Vec<String>> = Vec::new();
     let path = Path::new(path);
 
@@ -22,8 +21,7 @@ pub fn load_level(path: &str, player:&mut Player) -> (Vec<Vec<String>>, (usize,u
         let floor:Vec<String> = floor.split("").map(|s| s.to_string()).collect();
         for x in 0..floor.len(){
             if floor[x] == "0" {
-                player.position.0 = x;
-                player.position.1 = y;
+                start_position = Some((x, y));
             }
             if floor[x].to_lowercase() == "x"{
                 end_position = Some((x, y));
@@ -32,10 +30,14 @@ pub fn load_level(path: &str, player:&mut Player) -> (Vec<Vec<String>>, (usize,u
         level.push(floor);
     }
 
-    if let Some(value) = end_position {
-        return (level, value)
+    if let Some(start) = start_position {
+        if let Some(end) = end_position{
+            return (level, end, start)
+        }else{
+            panic!("No end point !")
+        }
     }else{
-        panic!("No end point!");
+        panic!("No start point !");
     }
 
 }

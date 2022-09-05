@@ -1,4 +1,4 @@
-use colored::{Colorize};
+use colored::Colorize;
 
 pub struct Player {
     pub position: (usize, usize),

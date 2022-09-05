@@ -14,9 +14,11 @@ fn main() {
         health: 100,
         color: String::from("green"),
         icon: String::from("@")};
-    let level_tuple = load_level("src/level.txt", &mut player);
+    let level_tuple = load_level("src/level.txt");
     let level = level_tuple.0;
+    let start_position = level_tuple.2;
     let end_position = level_tuple.1;
+    player.position = start_position;
     while player.health != 0 && player.position != end_position{
         /* println!("{:?}", (end_position));
         break; */
