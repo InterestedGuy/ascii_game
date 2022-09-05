@@ -20,8 +20,6 @@ fn main() {
     let end_position = level_tuple.1;
     player.position = start_position;
     while player.health != 0 && player.position != end_position{
-        /* println!("{:?}", (end_position));
-        break; */
         render(&mut player, &level, &message);
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed");
